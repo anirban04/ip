@@ -134,6 +134,8 @@ int get_pos_prev(struct node* head, int val, struct node** pos_prev)
 	}
 }
 
+
+/* Function to swap 2 nodes of a linked list given their values */
 int swap_nodes(struct node** head_ref, int val1, int val2)
 {
 	struct node* node1_p;
@@ -186,6 +188,37 @@ int swap_nodes(struct node** head_ref, int val1, int val2)
 	return 0;
 }
 
+/* Function to return the value stored in the nth node of a linked list */
+int get_nth_node(struct node* head, int index)
+{
+	struct node* curr = head;
+
+	while(curr) {
+		index--;
+		if (!index)
+			return curr->val;
+		curr = curr->next;
+	}
+	return -1;
+}
+
+/* Floyd's cycle finding algo - Move 2 pointers first one by 1, second one by 2; if the meet - loop present */
+int detect_loop(struct node* head)
+{
+	struct node* x = head;
+	struct node* y = head;
+
+	while(x && y && y->next) {
+		x = x->next;
+		y = y->next->next;
+
+		if (x == y)
+			return 1;
+	}
+
+	return 0;
+}
+
 int main()
 {
 	struct node* head = NULL;
@@ -194,15 +227,17 @@ int main()
 	push(&head, 1); //1->7->6->NULL
 	append(&head, 4); //1->7->6->4->NULL
 	insert_after(head->next, 8); //1->7->8->6->4->NULL
-	printf("Before num elements = %d\n", get_count_it(head));
+	//printf("Before num elements = %d\n", get_count_it(head));
 	print_list(head);
 	//del_node(&head, 1);
 	//del_node(&head, 8);
-	printf("After num elements = %d\n", get_count_rc(head));
+	//printf("After num elements = %d\n", get_count_rc(head));
 	//swap_nodes(&head, 1, 6);
 	//swap_nodes(&head, 1, 6);
-	swap_nodes(&head, 1, 4);
-	print_list(head);
+	//swap_nodes(&head, 1, 4);
+	//printf("val at %d node = %d\n", 5, get_nth_node(head, 5));
+	//print_list(head);
+	printf("loop detection = %d\n", detect_loop(head));
 	return 0;
 }
 
