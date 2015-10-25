@@ -233,12 +233,40 @@ int del_node_by_ptr(struct node* node)
 	free(tmp);
 }
 
+
+/* Main Idea is to traverse the list with curr and keep breaking the next link and making it point to prev */
+int reverse_list(struct node** head_ref)
+{
+	/* Use 3 pointers, start with prev = NULL and curr = head */
+	struct node* p = NULL;
+	struct node* c = *head_ref;
+	struct node* n;
+
+	/* only chek for C cince that is only what we dereference */
+	while(c)
+	{
+		/* Do not update next until here */
+		n = c->next;
+		/* Cut the link to next and make it point to prev */
+		c->next = p;
+		/* Update p and c */
+		p = c;
+		c = n;
+	}
+
+	/*Finally update head_ref*/
+	*head_ref = p;
+
+	return 0;
+}
+
 int main()
 {
 	struct node* head = NULL;
 	append(&head, 6); //6->NULL
 	push(&head, 7); //7->6->NULL
 	push(&head, 1); //1->7->6->NULL
+	push(&head, 3); //1->7->6->NULL
 	append(&head, 4); //1->7->6->4->NULL
 	insert_after(head->next, 8); //1->7->8->6->4->NULL
 	printf("Before num elements = %d\n", get_count_it(head));
@@ -249,7 +277,8 @@ int main()
 	//swap_nodes(&head, 1, 6);
 	//swap_nodes(&head, 1, 4);
 	//printf("val at %d node = %d\n", 5, get_nth_node(head, 5));
-	del_node_by_ptr(head);
+	//del_node_by_ptr(head);
+	reverse_list(&head);
 	printf("After num elements = %d\n", get_count_rc(head));
 	print_list(head);
 	//printf("loop detection = %d\n", detect_loop(head));
