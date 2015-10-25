@@ -219,6 +219,20 @@ int detect_loop(struct node* head)
 	return 0;
 }
 
+int del_node_by_ptr(struct node* node)
+{
+	struct node* tmp = node->next;
+
+	if (!tmp) {
+		printf("This is the last node  - My algo does not work\n");
+		return -1;
+	}
+
+	node->val = tmp->val;
+	node->next = tmp->next;
+	free(tmp);
+}
+
 int main()
 {
 	struct node* head = NULL;
@@ -227,17 +241,18 @@ int main()
 	push(&head, 1); //1->7->6->NULL
 	append(&head, 4); //1->7->6->4->NULL
 	insert_after(head->next, 8); //1->7->8->6->4->NULL
-	//printf("Before num elements = %d\n", get_count_it(head));
+	printf("Before num elements = %d\n", get_count_it(head));
 	print_list(head);
 	//del_node(&head, 1);
 	//del_node(&head, 8);
-	//printf("After num elements = %d\n", get_count_rc(head));
 	//swap_nodes(&head, 1, 6);
 	//swap_nodes(&head, 1, 6);
 	//swap_nodes(&head, 1, 4);
 	//printf("val at %d node = %d\n", 5, get_nth_node(head, 5));
-	//print_list(head);
-	printf("loop detection = %d\n", detect_loop(head));
+	del_node_by_ptr(head);
+	printf("After num elements = %d\n", get_count_rc(head));
+	print_list(head);
+	//printf("loop detection = %d\n", detect_loop(head));
 	return 0;
 }
 
