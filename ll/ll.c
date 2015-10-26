@@ -26,7 +26,7 @@ int append(struct node** head_ref, int val)
 	if (NULL == *head_ref)
 	{
 		*head_ref = new;
-		return -1;
+		return 0;
 	}
 
 	/*Go to the end of the list*/
@@ -34,7 +34,7 @@ int append(struct node** head_ref, int val)
 		last = last->next;
 
 	last->next = new;
-	return;
+	return 0;
 }
 
 int insert_after(struct node* prev_node, int val)
@@ -368,16 +368,40 @@ int move_last_to_front(struct node** head_ref)
 	return 0;
 }
 
+int create_intersection_of_sorted_lists(struct node** head_ref, struct node* head1, struct node* head2)
+{
+	struct node* orig_head2 = head2;
+
+	while(head1) {
+		while((head2) && (head1->val >= head2->val)) {
+			if(head1->val == head2->val) {
+				append(head_ref, head1->val);
+			}
+			head2 = head2->next;
+		}
+		head1 = head1->next;
+		//head2 = orig_head2; // This is needed only for unsorted list
+	}
+}
+
 int main()
 {
 	struct node* head = NULL;
+	struct node* head1 = NULL;
+	struct node* head_int = NULL;
 	struct node* new_node;
 
+
+	append(&head1, 1);
+	append(&head1, 3);
+	append(&head1, 7);
+	append(&head1, 8);
+	append(&head1, 9);
+
 	append(&head, 7);
-	push(&head, 3);
 	push(&head, 6);
 	push(&head, 5);
-	push(&head, 3);
+	push(&head, 4);
 	push(&head, 3);
 	push(&head, 2);
 	push(&head, 1);
@@ -399,13 +423,18 @@ int main()
 	//print_list(head);
 	//remove_duplicates_from_sorted_list(&head);
 	//printf("After num elements = %d\n", get_count_rc(head));
+	printf("First \n");
 	print_list(head);
 	//printf("Printing Reverse\n");
 	//recursive_print_reverse(head);
-	move_last_to_front(&head);
+	//move_last_to_front(&head);
 	//printf("loop detection = %d\n", detect_loop(head));
-	printf("After moving last to front\n");
-	print_list(head);
+	//printf("After moving last to front\n");
+	printf("Second \n");
+	print_list(head1);
+	create_intersection_of_sorted_lists(&head_int, head, head1);
+	printf("Intersection \n");
+	print_list(head_int);
 	return 0;
 }
 
