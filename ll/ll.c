@@ -303,14 +303,36 @@ int insert_sorted (struct node** head_ref, struct node* new)
 	}
 }
 
+int remove_duplicates_from_sorted_list(struct node** head_ref)
+{
+	struct node* p;
+	struct node* c;
+
+	p = *head_ref;
+	c = p->next;
+
+	while(c) {
+		if (c->val == p->val) {
+			/* Delete current */
+			p->next = c->next;		
+			free(c);
+		}
+		p = c;
+		c = c->next;
+	}
+
+}
+
 int main()
 {
 	struct node* head = NULL;
 	struct node* new_node;
 
 	append(&head, 7);
+	push(&head, 7);
 	push(&head, 6);
 	push(&head, 5);
+	push(&head, 3);
 	push(&head, 3);
 	push(&head, 2);
 	push(&head, 1);
@@ -325,9 +347,12 @@ int main()
 	//printf("val at %d node = %d\n", 5, get_nth_node(head, 5));
 	//del_node_by_ptr(head);
 	//reverse_list(&head);
-	new_node = (struct node*)malloc(sizeof(struct node));
-	new_node->val = 4;
-	insert_sorted(&head, new_node);
+	//new_node = (struct node*)malloc(sizeof(struct node));
+	//new_node->val = 4;
+	//insert_sorted(&head, new_node);
+	//printf("After num elements = %d\n", get_count_rc(head));
+	//print_list(head);
+	remove_duplicates_from_sorted_list(&head);
 	printf("After num elements = %d\n", get_count_rc(head));
 	print_list(head);
 	//printf("loop detection = %d\n", detect_loop(head));
