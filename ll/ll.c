@@ -309,6 +309,12 @@ int remove_duplicates_from_sorted_list(struct node** head_ref)
 	struct node* c;
 
 	p = *head_ref;
+
+	if (!p) {
+		printf("List id Null\n");
+		return -1;
+	}
+		
 	c = p->next;
 
 	while(c) {
@@ -330,12 +336,16 @@ int main()
 
 	append(&head, 7);
 	push(&head, 7);
+	push(&head, 3);
+	push(&head, 3);
+#if 0
 	push(&head, 6);
 	push(&head, 5);
 	push(&head, 3);
 	push(&head, 3);
 	push(&head, 2);
 	push(&head, 1);
+#endif
 	//insert_after(head->next, 8); //1->7->8->6->4->NULL
 	printf("Before num elements = %d\n", get_count_it(head));
 	print_list(head);
