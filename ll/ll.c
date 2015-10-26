@@ -329,26 +329,61 @@ int remove_duplicates_from_sorted_list(struct node** head_ref)
 
 }
 
+/* Print the reverse of a linked list in a recursive way */
+int recursive_print_reverse(struct node* head)
+{
+	/* Check for exit case */
+	if (head->next)
+		recursive_print_reverse(head->next);
+
+	/* Print the value */
+	printf("%d\n", head->val);
+
+	return 0;
+}
+
+int move_last_to_front(struct node** head_ref)
+{
+	struct node* c = *head_ref;
+	struct node* p = NULL;
+
+	/* Handle the case of no elements in the list */
+	if(!c)
+		return -1;
+
+	/* Handle the case of only 1 element in the list */
+	if(NULL == c->next)
+		return -1;
+
+	/* Iterate to the end of the list with 2 pointers */
+	while(c->next) {
+		p = c;
+		c = c->next;
+	}
+
+	p->next = NULL;
+	c->next = *head_ref;
+	*head_ref = c;
+
+	return 0;
+}
+
 int main()
 {
 	struct node* head = NULL;
 	struct node* new_node;
 
 	append(&head, 7);
-	push(&head, 7);
 	push(&head, 3);
-	push(&head, 3);
-#if 0
 	push(&head, 6);
 	push(&head, 5);
 	push(&head, 3);
 	push(&head, 3);
 	push(&head, 2);
 	push(&head, 1);
-#endif
 	//insert_after(head->next, 8); //1->7->8->6->4->NULL
-	printf("Before num elements = %d\n", get_count_it(head));
-	print_list(head);
+	//printf("Before num elements = %d\n", get_count_it(head));
+	//print_list(head);
 	//del_node(&head, 1);
 	//del_node(&head, 8);
 	//swap_nodes(&head, 1, 6);
@@ -362,10 +397,15 @@ int main()
 	//insert_sorted(&head, new_node);
 	//printf("After num elements = %d\n", get_count_rc(head));
 	//print_list(head);
-	remove_duplicates_from_sorted_list(&head);
-	printf("After num elements = %d\n", get_count_rc(head));
+	//remove_duplicates_from_sorted_list(&head);
+	//printf("After num elements = %d\n", get_count_rc(head));
 	print_list(head);
+	//printf("Printing Reverse\n");
+	//recursive_print_reverse(head);
+	move_last_to_front(&head);
 	//printf("loop detection = %d\n", detect_loop(head));
+	printf("After moving last to front\n");
+	print_list(head);
 	return 0;
 }
 
