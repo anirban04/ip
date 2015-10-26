@@ -233,7 +233,6 @@ int del_node_by_ptr(struct node* node)
 	free(tmp);
 }
 
-
 /* Main Idea is to traverse the list with curr and keep breaking the next link and making it point to prev */
 int reverse_list(struct node** head_ref)
 {
@@ -260,15 +259,62 @@ int reverse_list(struct node** head_ref)
 	return 0;
 }
 
+/* Given a sorted list - Insert an element in a sorted way */
+int insert_sorted (struct node** head_ref, struct node* new)
+{
+	struct node* c;
+	struct node* p;
+	struct node* tmp;
+	p = NULL;
+	c = *head_ref;
+
+
+	/* If list is empty, make this the only element in the list */
+	if(!c) {
+		*head_ref = new;
+		new->next = NULL;
+		return 0;
+	}
+
+	/* If value of node to be inserted is smaller than the head node then insert at the start */
+	if(new->val < c->val) {
+		new->next = c->next;
+		*head_ref = new;
+		return 0;
+	}
+
+	/* Find where in the list does this fit in */
+	while(c && (new->val > c->val))
+	{
+		p = c;
+		c = c->next;
+	}
+
+	tmp = p->next;
+	p->next = new;
+
+	if(!c) {
+		/* Add to the end of the list */
+		new->next = NULL;
+	}
+	else {
+		/* Add after prev */
+		new->next = tmp;
+	}
+}
+
 int main()
 {
 	struct node* head = NULL;
-	append(&head, 6); //6->NULL
-	push(&head, 7); //7->6->NULL
-	push(&head, 1); //1->7->6->NULL
-	push(&head, 3); //1->7->6->NULL
-	append(&head, 4); //1->7->6->4->NULL
-	insert_after(head->next, 8); //1->7->8->6->4->NULL
+	struct node* new_node;
+
+	append(&head, 7);
+	push(&head, 6);
+	push(&head, 5);
+	push(&head, 3);
+	push(&head, 2);
+	push(&head, 1);
+	//insert_after(head->next, 8); //1->7->8->6->4->NULL
 	printf("Before num elements = %d\n", get_count_it(head));
 	print_list(head);
 	//del_node(&head, 1);
@@ -278,7 +324,10 @@ int main()
 	//swap_nodes(&head, 1, 4);
 	//printf("val at %d node = %d\n", 5, get_nth_node(head, 5));
 	//del_node_by_ptr(head);
-	reverse_list(&head);
+	//reverse_list(&head);
+	new_node = (struct node*)malloc(sizeof(struct node));
+	new_node->val = 4;
+	insert_sorted(&head, new_node);
 	printf("After num elements = %d\n", get_count_rc(head));
 	print_list(head);
 	//printf("loop detection = %d\n", detect_loop(head));
