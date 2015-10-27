@@ -409,11 +409,53 @@ int del_alt_nodes(struct node* head)
 	return 0;
 }
 
+int alt_split(struct node** hr1, struct node** hr2, struct node** head_ref)
+{
+
+	struct node* c = *head_ref;
+	struct node* h1 = *hr1;
+	struct node* h2 = *hr2;
+
+	/* Make sure that there is at least 1 element in the list */
+	if (!c)
+		return 0;
+
+	while(c) {
+		/* Handle the first node in the first list */
+		if(!h1)
+			*hr1 = c;
+		else
+			h1->next = c;
+		h1 = c;
+		/* Remove the node from the original list */
+		*head_ref = c->next;
+		c = c->next;
+		h1->next = NULL;
+
+		if(c) {
+			/* Handle the first node in the second list */
+			if(!h2)
+				*hr2 = c;
+			else
+				h2->next = c;
+			h2 = c;
+			/* Remove the node from the original list */
+			*head_ref = c->next;
+			c = c->next;
+			h2->next = NULL;
+		}
+		else
+			return 0;
+	}
+}
+
 int main()
 {
 	struct node* head = NULL;
 	struct node* head1 = NULL;
 	struct node* head_int = NULL;
+	struct node* h1 = NULL;
+	struct node* h2 = NULL;
 	struct node* new_node;
 
 
@@ -459,9 +501,15 @@ int main()
 	//print_list(head1);
 	//create_intersection_of_sorted_lists(&head_int, head, head1);
 	//printf("Intersection \n");
-	del_alt_nodes(head);
-	printf("After \n");
-	print_list(head);
+	//del_alt_nodes(head);
+	//alt_split(&h1, &h2, &head);
+	//printf("First \n");
+	//print_list(h1);
+	//printf("Second \n");
+	//print_list(h2);
+	//printf("orig \n");
+	printf("Second\n");
+	print_list(head1);
 	return 0;
 }
 
