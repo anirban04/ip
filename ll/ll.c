@@ -384,6 +384,31 @@ int create_intersection_of_sorted_lists(struct node** head_ref, struct node* hea
 	}
 }
 
+int del_alt_nodes(struct node* head)
+{
+	struct node* p = head;
+	struct node* c;
+
+	/* Check for empty list */
+	if (!p)
+	  return -1;
+
+	c = p->next;
+
+	while(c)
+	{
+		p->next = c->next;
+		p = c->next;
+		free(c);
+		if (p)
+			c = p->next;
+		else
+			return 0;
+	}
+
+	return 0;
+}
+
 int main()
 {
 	struct node* head = NULL;
@@ -423,18 +448,20 @@ int main()
 	//print_list(head);
 	//remove_duplicates_from_sorted_list(&head);
 	//printf("After num elements = %d\n", get_count_rc(head));
-	printf("First \n");
+	printf("Before \n");
 	print_list(head);
 	//printf("Printing Reverse\n");
 	//recursive_print_reverse(head);
 	//move_last_to_front(&head);
 	//printf("loop detection = %d\n", detect_loop(head));
 	//printf("After moving last to front\n");
-	printf("Second \n");
-	print_list(head1);
-	create_intersection_of_sorted_lists(&head_int, head, head1);
-	printf("Intersection \n");
-	print_list(head_int);
+	//printf("Second \n");
+	//print_list(head1);
+	//create_intersection_of_sorted_lists(&head_int, head, head1);
+	//printf("Intersection \n");
+	del_alt_nodes(head);
+	printf("After \n");
+	print_list(head);
 	return 0;
 }
 
