@@ -267,7 +267,10 @@ int insert_sorted (struct node** head_ref, struct node* new)
 	struct node* tmp;
 	p = NULL;
 	c = *head_ref;
-
+	
+	/* Ckeck if new node is NULL  */
+	if (!new)
+		return -1;
 
 	/* If list is empty, make this the only element in the list */
 	if(!c) {
@@ -277,7 +280,7 @@ int insert_sorted (struct node** head_ref, struct node* new)
 	}
 
 	/* If value of node to be inserted is smaller than the head node then insert at the start */
-	if(new->val < c->val) {
+	if(new->val <= c->val) {
 		new->next = c->next;
 		*head_ref = new;
 		return 0;
@@ -449,11 +452,26 @@ int alt_split(struct node** hr1, struct node** hr2, struct node** head_ref)
 	}
 }
 
+int join_sorted_lists(struct node** hr1, struct node** hr2)
+{
+	struct node* tmp;
+
+	tmp = *hr2;
+	
+	while(tmp) {
+		/* Remove the node from the first list */
+		*hr2 = tmp->next;
+		/* Insert it into the second list */
+		insert_sorted(hr1, tmp);
+		/* Go to the next element in the first list */
+		tmp = *hr2;
+	}
+}
+
 int main()
 {
 	struct node* head = NULL;
 	struct node* head1 = NULL;
-	struct node* head_int = NULL;
 	struct node* h1 = NULL;
 	struct node* h2 = NULL;
 	struct node* new_node;
@@ -490,7 +508,7 @@ int main()
 	//print_list(head);
 	//remove_duplicates_from_sorted_list(&head);
 	//printf("After num elements = %d\n", get_count_rc(head));
-	printf("Before \n");
+	printf("First \n");
 	print_list(head);
 	//printf("Printing Reverse\n");
 	//recursive_print_reverse(head);
@@ -510,6 +528,9 @@ int main()
 	//printf("orig \n");
 	printf("Second\n");
 	print_list(head1);
+	join_sorted_lists(&head, &head1);
+	printf("joint\n");
+	print_list(head);
 	return 0;
 }
 
