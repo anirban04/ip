@@ -526,6 +526,23 @@ int merge_sorted_lists(struct node**hr1, struct node** hr2, struct node**hrm)
 	}
 }
 
+int find_middle(struct node* head, struct node** middle)
+{
+	/* Use 2 pointers */
+  	struct node* fast = head;
+	struct node* slow = head;
+
+	/* Check the slow pointer and the next of the fast pointer */
+	while (slow && fast->next) {
+	  /* Increment the slow pointer by 1 */
+	  slow = slow->next;
+	  /* Increment the fast pointer by 2 */
+	  fast = fast->next->next;
+	}
+
+	*middle = slow;
+	return 0;
+}
 
 int main()
 {
@@ -535,6 +552,7 @@ int main()
 	struct node* h1 = NULL;
 	struct node* h2 = NULL;
 	struct node* new_node;
+	struct node* middle;
 
 
 	append(&head1, 1);
@@ -586,12 +604,20 @@ int main()
 	//printf("Second \n");
 	//print_list(h2);
 	//printf("orig \n");
-	printf("Second\n");
-	print_list(head1);
+	//printf("Second\n");
+	//print_list(head1);
 	//join_sorted_lists(&head, &head1);
-	merge_sorted_lists(&head, &head1, &head_mer);
-	printf("joint\n");
-	print_list(head_mer);
+	//merge_sorted_lists(&head, &head1, &head_mer);
+	//printf("joint\n");
+	//print_list(head_mer);
+	//printf("Second\n");
+	//print_list(head1);
+	//join_sorted_lists(&head, &head1);
+	//printf("joint\n");
+	//print_list(head);
+	find_middle(head, &middle);
+	printf("Middle of the list is %d\n", middle->val);
+
 	return 0;
 }
 
