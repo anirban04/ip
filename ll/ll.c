@@ -57,10 +57,9 @@ int print_list(struct node* node)
 {
 	int cnt = 0;
 
-	while(node && cnt < 10) {
+	while(node) {
 		printf("%d \n", node->val);
 		node = node->next;
-		cnt++;
 	}
 }
 
@@ -468,10 +467,71 @@ int join_sorted_lists(struct node** hr1, struct node** hr2)
 	}
 }
 
+int merge_sorted_lists(struct node**hr1, struct node** hr2, struct node**hrm)
+{
+	struct node* c = *hrm;
+
+	while(*hr1 && *hr2) {
+		if ((*hr1)->val <= (*hr2)->val) {
+			/* Handle the case of the first element */
+			if(!c) {
+				*hrm = *hr1;
+				c = *hrm;
+			}
+			else 
+			{
+				/* Add the node in the result list */
+				c->next  = *hr1;
+				/* Move ahead the pointer in the result list */
+				c = c->next;
+			}
+			/* Move ahead the pointer in the source list */
+			*hr1 = (*hr1)->next;
+			/* Mark the last next in the result list as NULL */
+			c->next = NULL;
+		}
+		else {
+			/* Handle the case of the first element */
+			if(!c) {
+				*hrm = *hr2;
+				c = *hrm;
+			}
+			else {
+				/* Add the node in the result list */
+				c->next  = *hr2;
+				/* Move ahead the pointer in the result list */
+				c = c->next;
+			}
+			/* Move ahead the pointer in the source list */
+			*hr2 = (*hr2)->next;
+			/* Mark the last next in the result list as NULL */
+			c->next = NULL;
+		}
+	}
+
+	/* Check if there are any elements left in the first list */
+	if(*hr1) {
+		/* Add remaining elements to the end of the result list */
+		c->next = *hr1;
+		/* Make the ref of the source list as NULL */
+		*hr1 = NULL;
+	}
+
+	/* Check if there are any elements left in the second list */
+	if(*hr2) {
+		/* Add remaining elements to the end of the result list */
+		c->next = *hr2;
+		/* Make the ref of the source list as NULL */
+		*hr2 = NULL;
+	}
+}
+
+
 int main()
 {
 	struct node* head = NULL;
 	struct node* head1 = NULL;
+	struct node* head_mer = NULL;
 	struct node* h1 = NULL;
 	struct node* h2 = NULL;
 	struct node* new_node;
@@ -528,9 +588,10 @@ int main()
 	//printf("orig \n");
 	printf("Second\n");
 	print_list(head1);
-	join_sorted_lists(&head, &head1);
+	//join_sorted_lists(&head, &head1);
+	merge_sorted_lists(&head, &head1, &head_mer);
 	printf("joint\n");
-	print_list(head);
+	print_list(head_mer);
 	return 0;
 }
 
