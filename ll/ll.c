@@ -467,62 +467,62 @@ int join_sorted_lists(struct node** hr1, struct node** hr2)
 	}
 }
 
-int merge_sorted_lists(struct node**hr1, struct node** hr2, struct node**hrm)
+int merge_sorted_lists(struct node* h1, struct node* h2, struct node** hrm)
 {
-	struct node* c = *hrm;
+	struct node* c;
 
-	while(*hr1 && *hr2) {
-		if ((*hr1)->val <= (*hr2)->val) {
+	/* Clear the pointer to the result list */
+	*hrm = NULL;
+	c = *hrm;
+
+	while(h1 && h2) {
+		if (h1->val <= h2->val) {
 			/* Handle the case of the first element */
 			if(!c) {
-				*hrm = *hr1;
+				*hrm = h1;
 				c = *hrm;
 			}
-			else 
+			else
 			{
 				/* Add the node in the result list */
-				c->next  = *hr1;
+				c->next  = h1;
 				/* Move ahead the pointer in the result list */
 				c = c->next;
 			}
 			/* Move ahead the pointer in the source list */
-			*hr1 = (*hr1)->next;
+			h1 = h1->next;
 			/* Mark the last next in the result list as NULL */
 			c->next = NULL;
 		}
 		else {
 			/* Handle the case of the first element */
 			if(!c) {
-				*hrm = *hr2;
+				*hrm = h2;
 				c = *hrm;
 			}
 			else {
 				/* Add the node in the result list */
-				c->next  = *hr2;
+				c->next  = h2;
 				/* Move ahead the pointer in the result list */
 				c = c->next;
 			}
 			/* Move ahead the pointer in the source list */
-			*hr2 = (*hr2)->next;
+			h2 = h2->next;
 			/* Mark the last next in the result list as NULL */
 			c->next = NULL;
 		}
 	}
 
 	/* Check if there are any elements left in the first list */
-	if(*hr1) {
+	if(h1) {
 		/* Add remaining elements to the end of the result list */
-		c->next = *hr1;
-		/* Make the ref of the source list as NULL */
-		*hr1 = NULL;
+		c->next = h1;
 	}
 
 	/* Check if there are any elements left in the second list */
-	if(*hr2) {
+	if(h2) {
 		/* Add remaining elements to the end of the result list */
-		c->next = *hr2;
-		/* Make the ref of the source list as NULL */
-		*hr2 = NULL;
+		c->next = h2;
 	}
 }
 
@@ -532,16 +532,69 @@ int find_middle(struct node* head, struct node** middle)
   	struct node* fast = head;
 	struct node* slow = head;
 
+	/* Check for the case where there are no or only 1 elemant in the list */
+	if((!fast) || (NULL == fast->next))
+		return -1;
+
 	/* Check the slow pointer and the next of the fast pointer */
 	while (slow && fast->next) {
 	  /* Increment the slow pointer by 1 */
 	  slow = slow->next;
 	  /* Increment the fast pointer by 2 */
 	  fast = fast->next->next;
+	  if (!fast)
+	  	break;
 	}
 
 	*middle = slow;
 	return 0;
+}
+
+/* Given a list, this function splits it in the middle and returns 2 lists */
+int split_list(struct node* head, struct node** a, struct node** b)
+{
+	struct node* fast = head;
+	struct node* slow = head;
+
+	if(!head)
+		return -1;
+
+	/* Handle the case of no elements in the list */
+	if (!head->next) {
+		*a = head;
+		*b = NULL;
+	}
+
+	while(fast->next) {
+		fast = fast->next->next;
+		if (!fast)
+			break;
+		slow = slow->next;
+	}
+	*a = head;
+	*b = slow->next;
+	slow->next = NULL;
+}
+
+int merge_sort(struct node** head_ref)
+{
+  	struct node* a;
+  	struct node* b;
+	struct node* head = *head_ref;
+
+	/* Base case - Check if length is 0 or 1 */
+  	if ((NULL == head) || (NULL == head->next))
+		return 0;
+
+	/* split the list into 2 lists */
+	split_list(head, &a, &b);
+
+	/* Merge sort the indivudial lists */
+	merge_sort(&a);
+	merge_sort(&b);
+
+  	/* Merge the 2 sorted lists */
+	merge_sorted_lists(a, b, head_ref); 
 }
 
 int main()
@@ -555,19 +608,23 @@ int main()
 	struct node* middle;
 
 
-	append(&head1, 1);
-	append(&head1, 3);
-	append(&head1, 7);
-	append(&head1, 8);
-	append(&head1, 9);
+	//append(&head1, 1);
+	//append(&head1, 3);
+	//append(&head1, 7);
+	//append(&head1, 8);
+	//append(&head1, 9);
 
-	append(&head, 7);
-	push(&head, 6);
-	push(&head, 5);
-	push(&head, 4);
-	push(&head, 3);
-	push(&head, 2);
-	push(&head, 1);
+	append(&head, 4);
+	append(&head, 3);
+	append(&head, 2);
+	append(&head, 1);
+	//append(&head, 8);
+	//push(&head, 2);
+	//push(&head, 1);
+	//push(&head, 4);
+	//push(&head, 3);
+	//push(&head, 6);
+	
 	//insert_after(head->next, 8); //1->7->8->6->4->NULL
 	//printf("Before num elements = %d\n", get_count_it(head));
 	//print_list(head);
@@ -586,7 +643,7 @@ int main()
 	//print_list(head);
 	//remove_duplicates_from_sorted_list(&head);
 	//printf("After num elements = %d\n", get_count_rc(head));
-	printf("First \n");
+	printf("Before \n");
 	print_list(head);
 	//printf("Printing Reverse\n");
 	//recursive_print_reverse(head);
@@ -607,7 +664,7 @@ int main()
 	//printf("Second\n");
 	//print_list(head1);
 	//join_sorted_lists(&head, &head1);
-	//merge_sorted_lists(&head, &head1, &head_mer);
+	//merge_sorted_lists(head, head1, &head_mer);
 	//printf("joint\n");
 	//print_list(head_mer);
 	//printf("Second\n");
@@ -615,8 +672,17 @@ int main()
 	//join_sorted_lists(&head, &head1);
 	//printf("joint\n");
 	//print_list(head);
-	find_middle(head, &middle);
-	printf("Middle of the list is %d\n", middle->val);
+	//find_middle(head, &middle);
+	//printf("Middle of the list is %d\n", middle->val);
+	merge_sort(&head);
+	printf("After \n");
+	print_list(head);
+	//printf("Calling Split List \n");
+	//split_list(head, &h1, &h2);
+	//printf("F \n");
+	//print_list(h1);
+	//printf("S \n");
+	//print_list(h2);
 
 	return 0;
 }
