@@ -597,6 +597,44 @@ int merge_sort(struct node** head_ref)
 	merge_sorted_lists(a, b, head_ref); 
 }
 
+/* This function deletes a node from a list is there is any node greater than that to the right of it  */
+int delete_lesser(struct node** head_ref)
+{
+	struct node* p;
+	struct node* c = *head_ref;
+	struct node* tr;
+
+	/* Check if there is only one element in the list */
+	if (!c)
+		return -1;
+
+	/* Run 2 loops to compare every element in the list against all elements to its right */
+	/* In the outer loop - use 2 pointers to traverse the list since we will want to delete elements from it */
+	while(c) {
+	  	tr = c->next;
+		while(tr) {
+		  	if (c->val < tr->val) {
+				/* Check if the element to be deleted is the first one in the list */
+			  	if(!p) {
+					*head_ref = c->next;
+					free(c);
+					c = *head_ref;
+				}
+				else {
+					p->next = c->next;
+					free(c);
+					c = p->next;
+				}
+			}
+			tr = tr->next;
+		}
+	  	p = c;
+	  	c  = c->next;
+	}
+
+	return 0;
+}
+
 int main()
 {
 	struct node* head = NULL;
@@ -614,10 +652,14 @@ int main()
 	//append(&head1, 8);
 	//append(&head1, 9);
 
-	append(&head, 4);
-	append(&head, 3);
-	append(&head, 2);
-	append(&head, 1);
+	append(&head, 12);
+	//append(&head, 15);
+	//append(&head, 10);
+	//append(&head, 11);
+	//append(&head, 5);
+	//append(&head, 6);
+	//append(&head, 2);
+	//append(&head, 3);
 	//append(&head, 8);
 	//push(&head, 2);
 	//push(&head, 1);
@@ -674,8 +716,9 @@ int main()
 	//print_list(head);
 	//find_middle(head, &middle);
 	//printf("Middle of the list is %d\n", middle->val);
-	merge_sort(&head);
+	//merge_sort(&head);
 	printf("After \n");
+	delete_lesser(&head);
 	print_list(head);
 	//printf("Calling Split List \n");
 	//split_list(head, &h1, &h2);
