@@ -635,6 +635,36 @@ int delete_lesser(struct node** head_ref)
 	return 0;
 }
 
+struct node* add_two_lists(struct node* l1, struct node* l2)
+{
+	struct node* res;
+	int val;
+	int carry;
+
+	while(l1 && l2) {
+	  	val = l1->val + l2->val + carry;
+		if(val > 10) {
+			val = val - 10;
+			carry = 1;
+		}
+		else
+			carry = 0;
+		
+
+		l1 = l1->next;
+		l2 = l2->next;
+	}
+
+	if (!l1 && l2) {
+		
+	}
+	else if (!l2 && l1) {
+		
+	}
+
+	return res;
+}
+
 int main()
 {
 	struct node* head = NULL;
@@ -644,15 +674,16 @@ int main()
 	struct node* h2 = NULL;
 	struct node* new_node;
 	struct node* middle;
+	struct node* res = NULL;
 
 
-	//append(&head1, 1);
-	//append(&head1, 3);
-	//append(&head1, 7);
+	append(&head1, 1);
+	append(&head1, 3);
+	append(&head1, 7);
 	//append(&head1, 8);
 	//append(&head1, 9);
 
-	append(&head, 12);
+	//append(&head, 12);
 	//append(&head, 15);
 	//append(&head, 10);
 	//append(&head, 11);
@@ -661,9 +692,9 @@ int main()
 	//append(&head, 2);
 	//append(&head, 3);
 	//append(&head, 8);
-	//push(&head, 2);
-	//push(&head, 1);
-	//push(&head, 4);
+	push(&head, 2);
+	push(&head, 1);
+	push(&head, 4);
 	//push(&head, 3);
 	//push(&head, 6);
 	
@@ -685,7 +716,7 @@ int main()
 	//print_list(head);
 	//remove_duplicates_from_sorted_list(&head);
 	//printf("After num elements = %d\n", get_count_rc(head));
-	printf("Before \n");
+	printf("First \n");
 	print_list(head);
 	//printf("Printing Reverse\n");
 	//recursive_print_reverse(head);
@@ -717,9 +748,13 @@ int main()
 	//find_middle(head, &middle);
 	//printf("Middle of the list is %d\n", middle->val);
 	//merge_sort(&head);
-	printf("After \n");
-	delete_lesser(&head);
-	print_list(head);
+	printf("Second \n");
+	//delete_lesser(&head);
+	print_list(head1);
+	res = add_two_lists(head, head1);
+	printf("Added \n");
+	print_list(res);
+
 	//printf("Calling Split List \n");
 	//split_list(head, &h1, &h2);
 	//printf("F \n");
